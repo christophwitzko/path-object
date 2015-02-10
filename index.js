@@ -3,24 +3,20 @@
 var assign = require('lodash.assign')
 
 /* eslint consistent-this: 0 */
-var PathObject = module.exports = function (obj, seperator) {
-  if (!(this instanceof PathObject)) return new PathObject(obj, seperator)
+var PathObject = module.exports = function (obj) {
+  if (!(this instanceof PathObject)) return new PathObject(obj)
   assign(this, obj)
-  this._seperator = function () {
-    return seperator || '/'
-  }
 }
 
 PathObject.prototype.normalizePath = function (path) {
   if (!path || typeof path !== 'string') return null
-  var seperator = this._seperator()
-  if (path[path.length - 1] === seperator) {
+  if (path[path.length - 1] === '/') {
     path = path.substr(0, path.length - 1)
   }
-  if (path[0] === seperator) {
+  if (path[0] === '/') {
     path = path.substr(1)
   }
-  return path.length ? path.split(this._seperator()) : null
+  return path.length ? path.split('/') : null
 }
 
 PathObject.prototype.get = function (path) {
