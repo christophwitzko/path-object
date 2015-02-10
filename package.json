@@ -1,7 +1,7 @@
 {
   "name": "path-object",
   "version": "0.0.0",
-  "description": "access a object with a path",
+  "description": "access object keys with a path",
   "main": "index.js",
   "scripts": {
     "test": "standard && node test | tap-spec",
