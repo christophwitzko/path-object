@@ -4,7 +4,7 @@ var assign = require('lodash.assign')
 
 module.exports = function (seperator) {
   seperator = seperator || '/'
-  /* eslint consistent-this: 0 */
+  /* eslint consistent-this:0 */
   var PathObject = function (obj) {
     if (!(this instanceof PathObject)) return new PathObject(obj)
     assign(this, obj)
@@ -26,7 +26,6 @@ module.exports = function (seperator) {
     if (!spath) return null
     var last = this
     var err = spath.some(function (n, i) {
-      if (!n.length) return false
       if (typeof last[n] === 'undefined') return true
       last = last[n]
     })
@@ -38,9 +37,8 @@ module.exports = function (seperator) {
     if (!spath) return null
     var last = this
     spath.forEach(function (n, i) {
-      if (!n.length) return
-      if (typeof last === 'object') {
-        last[n] = (spath.length - i > 1) ? (last[n] || {}) : value
+      if (typeof last === 'object' && last) {
+        last[n] = (spath.length - i > 1) ? ((typeof last[n] === 'object' && last[n]) ? last[n] : {}) : value
       }
       last = last[n]
     })
@@ -53,9 +51,18 @@ module.exports = function (seperator) {
     })
   }
 
-  PathObject.prototype.dump = function () {
+  PathObject.prototype.dump = function (root, strip) {
     var retObj = {}
-    traverse(retObj, '', this)
+    var nroot = ''
+    var startObj = this
+    if (root) {
+      var srobj = this.get(root)
+      if (typeof srobj === 'object' && srobj) {
+        nroot = this.normalizePath(root).join(seperator) + seperator
+        startObj = srobj
+      } else return {}
+    }
+    traverse(retObj, strip ? '' : nroot, startObj)
     return retObj
   }
 
