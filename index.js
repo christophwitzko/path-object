@@ -46,7 +46,7 @@ module.exports = function (seperator) {
 
   function traverse (retObj, root, obj) {
     Object.keys(obj).forEach(function (k) {
-      if (typeof obj[k] === 'object') return traverse(retObj, root + k + seperator, obj[k])
+      if (typeof obj[k] === 'object' && obj[k]) return traverse(retObj, root + k + seperator, obj[k])
       retObj[root + k] = obj[k]
     })
   }
