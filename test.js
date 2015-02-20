@@ -5,7 +5,7 @@ var test = require('tape')
 var PathObject = require('./')()
 
 test('set path', function (t) {
-  t.plan(4)
+  t.plan(5)
   var po = new PathObject()
   po.set('my/cool/path', 'test1')
   t.equal(po.my.cool.path, 'test1', 'set 1')
@@ -13,7 +13,7 @@ test('set path', function (t) {
   t.equal(po.my, 'test2', 'set 2')
   po.set('/my1/path', 'test3')
   t.equal(po.my1.path, 'test3', 'set 3')
-  po.set('/', 'test4')
+  t.throws(po.set.bind(po, '/', 'test4'), /invaild path/, 'set invalid path')
   po.set('foo/bar', {asd: 'test5'})
   t.equal(po.foo.bar.asd, 'test5', 'set 4')
 })
@@ -37,7 +37,7 @@ test('get path', function (t) {
   t.equal(po.get('/cd/pwd/xd/'), po.cd.pwd.xd, 'get 2')
   t.equal(po.get('/cd//pwd///xd//master/'), po.cd.pwd.xd.master, 'get 3')
   t.equal(po.get('cd/pwd/xd/master'), po.cd.pwd.xd.master, 'get 4')
-  t.equal(po.get('foo/bar'), null, 'get 5')
+  t.equal(po.get('foo/bar'), undefined, 'get 5')
 })
 
 test('dump paths', function (t) {

@@ -43,18 +43,18 @@ module.exports = function (seperator) {
 
   PathObject.prototype.get = function (path) {
     var spath = normalizePath(path)
-    if (!spath) return null
+    if (!cutil.isArray(spath)) throw new Error('invaild path')
     var last = this
     var err = spath.some(function (n, i) {
       if (cutil.isUndefined(last[n])) return true
       last = last[n]
     })
-    return err ? null : last
+    return err ? undefined : last
   }
 
   PathObject.prototype.set = function (path, value) {
     var spath = normalizePath(path)
-    if (!spath) return null
+    if (!cutil.isArray(spath)) throw new Error('invaild path')
     var last = this
     spath.forEach(function (n, i) {
       if (isObject(last)) {
