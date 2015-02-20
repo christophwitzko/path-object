@@ -26,7 +26,7 @@ module.exports = function (seperator) {
   }
 
   function checkPath (spath) {
-    var pofns = ['get', 'set', 'remove', 'dump']
+    var pofns = ['get', 'exists', 'set', 'remove', 'dump']
     if (!spath.length || ~pofns.indexOf(spath[0])) return null
     return spath
   }
@@ -56,6 +56,14 @@ module.exports = function (seperator) {
       last = last[n]
     })
     return err ? undefined : last
+  }
+
+  PathObject.prototype.exists = function (path) {
+    var spath = normalizePath(path)
+    if (!cutil.isArray(spath)) throw new Error('invaild path')
+    var el = spath.pop()
+    var last = spath.length ? this.get(spath.join(seperator)) : this
+    return isObject(last) && el in last
   }
 
   PathObject.prototype.set = function (path, value) {
@@ -90,7 +98,7 @@ module.exports = function (seperator) {
 
   PathObject.prototype.remove = function (path) {
     var spath = normalizePath(path)
-    if (!cutil.isArray(spath)) throw new Error('invaild path')
+    if (!cutil.isArray(spath) || !this.exists(path)) throw new Error('invaild path')
     spath = spath.slice(0, spath.length - objectChainCount(this, spath) + 1)
     var el = spath.pop()
     var last = spath.length ? this.get(spath.join(seperator)) : this

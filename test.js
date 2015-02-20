@@ -42,7 +42,7 @@ test('get path', function (t) {
 })
 
 test('remove path', function (t) {
-  t.plan(4)
+  t.plan(5)
   /* eslint new-cap: 0 */
   var po = PathObject({
     my: {
@@ -75,6 +75,7 @@ test('remove path', function (t) {
   t.equal(po.my.cool, undefined, 'remove 3')
   po.remove('layers')
   t.equal(po.layers, undefined, 'remove 4')
+  t.throws(po.remove.bind(po, 'cd/asd'), /invaild path/, 'remove invalid path')
 })
 
 test('dump paths', function (t) {
