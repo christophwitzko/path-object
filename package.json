@@ -29,6 +29,7 @@
     "tape": "^3.5.0"
   },
   "dependencies": {
+    "core-util-is": "^1.0.1",
     "lodash.assign": "^3.0.0"
   }
 }
