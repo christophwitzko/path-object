@@ -41,6 +41,27 @@ test('get path', function (t) {
   t.equal(po.get('foo/bar'), undefined, 'get 5')
 })
 
+test('exists path', function (t) {
+  t.plan(4)
+  /* eslint new-cap: 0 */
+  var po = PathObject({
+    my: {
+      cool: 'path'
+    },
+    cd: {
+      pwd: {
+        xd: {
+          master: 'asdasdasd'
+        }
+      }
+    }
+  })
+  t.ok(po.exists('my/cool'), 'exists 1')
+  t.notOk(po.exists('foo/bar'), 'exists 2')
+  t.ok(po.exists('cd/pwd'), 'exists 3')
+  t.notOk(po.exists('my/very'), 'exists 4')
+})
+
 test('remove path', function (t) {
   t.plan(5)
   /* eslint new-cap: 0 */
@@ -75,7 +96,7 @@ test('remove path', function (t) {
   t.equal(po.my.cool, undefined, 'remove 3')
   po.remove('layers')
   t.equal(po.layers, undefined, 'remove 4')
-  t.throws(po.remove.bind(po, 'cd/asd'), /invaild path/, 'remove invalid path')
+  t.throws(po.remove.bind(po, 'cd/asd'), /path does not exist/, 'remove invalid path')
 })
 
 test('dump paths', function (t) {
