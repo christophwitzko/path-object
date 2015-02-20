@@ -5,7 +5,7 @@ var test = require('tape')
 var PathObject = require('./')()
 
 test('set path', function (t) {
-  t.plan(5)
+  t.plan(6)
   var po = new PathObject()
   po.set('my/cool/path', 'test1')
   t.equal(po.my.cool.path, 'test1', 'set 1')
@@ -13,9 +13,10 @@ test('set path', function (t) {
   t.equal(po.my, 'test2', 'set 2')
   po.set('/my1/path', 'test3')
   t.equal(po.my1.path, 'test3', 'set 3')
-  t.throws(po.set.bind(po, '/', 'test4'), /invaild path/, 'set invalid path')
-  po.set('foo/bar', {asd: 'test5'})
-  t.equal(po.foo.bar.asd, 'test5', 'set 4')
+  po.set('foo/bar', {asd: 'test4'})
+  t.equal(po.foo.bar.asd, 'test4', 'set 4')
+  t.throws(po.set.bind(po, '/', 'test'), /invaild path/, 'set invalid path 1')
+  t.throws(po.set.bind(po, 'set', 'test'), /invaild path/, 'set invalid path 2')
 })
 
 test('get path', function (t) {
@@ -38,6 +39,42 @@ test('get path', function (t) {
   t.equal(po.get('/cd//pwd///xd//master/'), po.cd.pwd.xd.master, 'get 3')
   t.equal(po.get('cd/pwd/xd/master'), po.cd.pwd.xd.master, 'get 4')
   t.equal(po.get('foo/bar'), undefined, 'get 5')
+})
+
+test('remove path', function (t) {
+  t.plan(4)
+  /* eslint new-cap: 0 */
+  var po = PathObject({
+    my: {
+      cool: 'path',
+      very: {
+        cool: {
+          path: 'root'
+        }
+      }
+    },
+    cd: {
+      pwd: {
+        xd: {
+          master: {
+            ref: 'asdasdasd'
+          }
+        },
+        lol: 33
+      }
+    },
+    layers: {
+      main: '1'
+    }
+  })
+  po.remove('cd/pwd/xd/master/ref')
+  t.equal(po.cd.pwd.xd, undefined, 'remove 1')
+  po.remove('cd/pwd/lol')
+  t.equal(po.cd, undefined, 'remove 2')
+  po.remove('my/cool')
+  t.equal(po.my.cool, undefined, 'remove 3')
+  po.remove('layers')
+  t.equal(po.layers, undefined, 'remove 4')
 })
 
 test('dump paths', function (t) {
