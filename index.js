@@ -117,10 +117,9 @@ module.exports = function (seperator) {
     var startObj = this
     if (root) {
       var srobj = this.get(root)
-      if (isObject(srobj)) {
-        nroot = strip ? '' : normalizePath(root).join(seperator) + seperator
-        startObj = srobj
-      } else return {}
+      if (!isObject(srobj)) return {}
+      nroot = strip ? '' : normalizePath(root).join(seperator) + seperator
+      startObj = srobj
     }
     traverse(retObj, nroot, startObj)
     return retObj
