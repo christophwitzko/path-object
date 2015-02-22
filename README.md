@@ -14,9 +14,13 @@ var fileObj = new PathObject()
 
 fileObj.set('path/to/file1', 'file1 content')
 fileObj.set('path/to/file2', 'file2 content')
+fileObj.set('path/to/my/extra/info', 'more info')
 fileObj.set('another/path/to/file', 'another file content')
 
 console.log('dump:', fileObj.dump())
+
+fileObj.remove('path/to/file2/extra/info')
+
 console.log('dump with scope:', fileObj.dump('path'))
 
 console.log('get by path:', fileObj.get('another/path/to/file'))
